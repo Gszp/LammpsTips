@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\open with ovito]
+"Icon"="C:\\Program Files\\OVITO Basic\\ovito.exe,0"
+
+[HKEY_CLASSES_ROOT\*\shell\open with ovito\command]
+@="C:\\Program Files\\OVITO Basic\\ovito.exe %1"
+
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal]
+"Icon"="C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.4.3243.0_x64__8wekyb3d8bbwe\\wt.exe,0"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal\command]
+@="wt.exe"
