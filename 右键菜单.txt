@@ -13,3 +13,5 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal\command]
 @="wt.exe"
+
+C:\Users\HuaweiSzp\AppData\Roaming\Sublime Text 3\Packages\User
