@@ -464,4 +464,8 @@ screen -ls
 sudo apt install net-tools
 ipconfig #windows powershell
 ifconfig #ubuntu
+hpc@222.199.222.242
+lirui@222.199.222.166
+HuaweiSzp@222.199.222.196
+scp -r lirui@222.199.222.166:/home/lirui/桌面/孙展鹏/test.in .
 
