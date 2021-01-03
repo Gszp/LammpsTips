@@ -73,18 +73,25 @@ $$
 
 值得注意的是，我们经常查阅的命令语法部分放在了程序员指南中的Commands中，遇到不会的命令，直接搜索阅读就可以了。
 
-### Commands
+### commands
 
 ```
 set		group lower type 2
 set		group upper type 3
 ```
 
+### group函数与输出
 
+```
+variable a equal count(Gcount1)
+print Gcount1中的原子数目为：$a
+```
 
 ## Atomsk
 
 利用atomsk可以得到石墨烯、碳纳米管、常见金属的初始模型，并切割得到几何构型如球、圆柱等。需要将模型进行组合时建议使用ovito。虽然atomsk内也能进行，但过于繁琐，易出错。
+
+[working with LAMMPS files](https://atomsk.univ-lille.fr/tutorial_lammps.php)
 
 ### 构建多晶
 
@@ -340,11 +347,21 @@ Shift+F11 免打扰模式
 
 ### 自定义in文件高亮
 
+需要安装包管理器
+
  [in.sublime-syntax](Every-day-notes.assets\in.sublime-syntax) 
 
  [lmp.sublime-syntax](Every-day-notes.assets\lmp.sublime-syntax) 
 
  [lammps.sublime-syntax](Every-day-notes.assets\lammps.sublime-syntax) 
+
+### 缩进
+
+缩进可以使用空格和tab，tab具有自动对齐的功能，推荐使用tab键编写in文件。
+
+![image-20210103151543301](Every-day-notes.assets/image-20210103151543301.png)
+
+注意，在python中不支持tab键和空格建的混用，所以最好用4个空格代替tab键。
 
 ## Python
 
@@ -380,7 +397,11 @@ for x in range(1,33):
 
 ## Markdown
 
-### markdown概览
+Markdown是一种[轻量级标记语言](https://baike.baidu.com/item/轻量级标记语言/52671915)，创始人为约翰·格鲁伯（英语：John Gruber）。 它允许人们使用易读易写的纯文本格式编写文档，然后转换成有效的XHTML（或者HTML）文档。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。
+
+由于Markdown的轻量化、易读易写特性，并且对于图片，图表、数学式都有支持，目前许多网站都广泛使用Markdown来撰写帮助文档或是用于论坛上发表消息。 如[GitHub](https://baike.baidu.com/item/GitHub/10145341)、[Reddit](https://baike.baidu.com/item/Reddit/1272010)、[Diaspora](https://baike.baidu.com/item/Diaspora/10726893)、[Stack Exchange](https://baike.baidu.com/item/Stack Exchange/13777796)、[OpenStreetMap](https://baike.baidu.com/item/OpenStreetMap/3171606) 、[SourceForge](https://baike.baidu.com/item/SourceForge/6562141)、[简书](https://baike.baidu.com/item/简书/5782216)等，甚至还能被使用来撰写[电子书](https://baike.baidu.com/item/电子书/346054)。
+**Markdown可以快速转化为演讲PPT、Word产品文档甚至是用非常少量的代码完成最小可用原型。**
+markdown热搜如下：
 
 - markdown **表格**
 - markdown **公式**
@@ -418,7 +439,7 @@ for x in range(1,33):
 
 ### 常用软件加入右键菜单
 
-实现方式很简单，往注册表里加入几项即可。
+实现方式很简单，往注册表里加入几项即可。根据需要将下面的文字复制到文本文件中，格式改为.reg，双击运行。
 
 ```
 Windows Registry Editor Version 5.00
@@ -466,6 +487,5 @@ ipconfig #windows powershell
 ifconfig #ubuntu
 hpc@222.199.222.242
 lirui@222.199.222.166
-HuaweiSzp@222.199.222.196
+HuaweiSzp@222.199.222.221
 scp -r lirui@222.199.222.166:/home/lirui/桌面/孙展鹏/test.in .
-
