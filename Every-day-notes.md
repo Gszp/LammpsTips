@@ -34,10 +34,10 @@ thermo 10
 dump myDump all atom 10 dump2.atom
 #---------------------定义势函数、邻居列表---------------------
 #pair_style eam/fs
-#pair_coeff * * Ni1_Mendelev_2012.eam.fs Ni
+#pair_coeff * * Ni1_Mendelev_2012.eam.fs Ni                    
 
-pair_style meam/c
-pair_coeff * * library.Ni.meam Ni Ni.meam Ni
+pair_style meam/c  
+pair_coeff * * library.Ni.meam Ni Ni.meam Ni     
 
 neighbor 2.0 bin
 neigh_modify every 1 delay 0 check yes
