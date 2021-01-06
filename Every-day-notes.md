@@ -9,7 +9,7 @@
 
 最小化后（原子不再重叠）
 
-![image-20201229210818453](Every-day-notes.assets/image-20201229210818453.png)
+<img src="Every-day-notes.assets/image-20201229210818453.png" alt="image-20201229210818453"  />
 
 总结：能量最小化用来得到体系能量最小稳定的初始构型。
 ### 弛豫
@@ -83,8 +83,103 @@ set		group upper type 3
 ### group函数与输出
 
 ```
-variable a equal count(Gcount1)
+variable a equal count(Gcount1) #Gcount1为动态时输出结果为0
 print Gcount1中的原子数目为：$a
+```
+
+### 固定基底
+
+将受力和速度设为0即可
+
+```
+fix			0 Gboundary setforce 0.0 0.0 0.0
+velocity 	Gboundary set 0.0 0.0 0.0
+```
+
+### 动态group与静态group
+
+```
+group mine dynamic all region myRegion every 100
+```
+
+> 默认情况下组是静态的，这意味着原子被永久地分配给组。例如，如果使用region样式将原子分配给一个组，那么即使这些原子后来移出该区域，它们也将保留在组中。如下所述，动态样式可用于使组动态，以便周期性地确定组中有哪些原子。由于许多lammps命令对原子组进行操作，因此您应该仔细考虑对模型进行组动态是否有意义。
+
+> 动态样式将现有组或新组标记为动态组。这意味着在模拟运行时，原子将被周期性地(重新)分配到组中。这与静态基团形成了鲜明对比，在静态基团中，原子被永久地分配到这个基团上。赋值的方式如下。在应用以下条件之前，只有通过parent-id指定为父组的组中的原子才会被分配给动态组。如果使用region关键字，则将从动态组中删除不在指定区域中的原子。
+
+郎之万控温命令能作用于动态group，fix heat 则不能。
+
+### errors
+
+运行lammps遇到错误时，我们的第一反应往往是在网络上搜索。然而，手册中其实按字母顺序列出了所有的错误信息并给出了错误原因，因此直接在手册中搜索更为直接。
+
+> This is an alphabetic list of the ERROR messages LAMMPS prints out and the reason why. If the explanation hereis not sufficient, the documentation for the offending command may help. Error messages also list the source file andline number where the error was generated. For example, a message like this:
+>
+> ```
+> ERROR: Illegal velocity command (velocity.cpp:78)
+> ```
+>
+> means that line #78 in the file src/velocity.cpp generated the error. Looking in the source code may help you figure outwhat went wrong.
+> `Note that error messages from user-contributed packages are not listed here`. If such an error occurs and is not selfexplanatory,you will need to look in the source code or contact the author of the package.
+
+### 剩余计算时间
+
+```
+thermo_style custom step temp etotal c_myTemp[*] v_abc cpu cpuremain
+```
+
+> cpu = elapsed CPU time in seconds since start of this run
+>
+> cpuremain = estimated CPU time remaining in run
+
+### meam/c
+
+```
+pair_style meam/c
+pair_coeff * * library.meam Ni Cr Fe NiCrFe.meam Ni Cr Fe
+```
+
+>只有一个pair_coeff命令与meam样式一起使用，它指定了两个meam文件和要提取信息的元素。通过在pair_coeff命令的第二个文件名后指定N个附加参数，将MEAM元素映射到LAMMPS atom类型，其中N是LAMMPS原子类型的数量。
+>
+>- MEAM library file
+>- Elem1, Elem2, . . .
+>- MEAM parameter file
+>- N element names = mapping of MEAM elements to atom types
+>
+
+> Note: If the second filename is NULL, the element names between the two filenames can appear in any order, e.g.“Si C” or “C Si” in the example above. However, if the second filename is not NULL (as in the example above), it contains settings that are Fortran-indexed for the elements that precede it. Thus you need to insure you list the elements between the filenames in an order consistent with how the values in the second filename are indexed. See details below on the syntax for settings in the second file.
+
+`总结：两个文件名之间的元素，顺序应按文件中的元素顺序来。两个文件名之后的元素，顺序按照你的data文件来。`
+
+### 重新开始计算
+
+lammps在每次运行时会先读入in文件中的所有内容，那么如果in文件的最后几部分需要修改该怎么办呢？
+
+```
+write_restart restart.equil
+```
+
+>编写当前模拟状态的二进制重启文件。
+>
+>在长时间的模拟过程中，通常使用restart命令周期性地输出重启文件。
+>write_restart命令在进行最小化操作后或希望写入单个当前重启文件时非常有用。
+
+### 变量
+
+在lammps中，变量可以有很多种类型，比如equal，atom，index等。对于equal变量，遵循`用时才更新，不用不更新`的原则。例如：应变strain可以这样计算：
+
+```
+variable tmp equal "lz"
+variable L0 equal ${tmp}
+variable strain equal "(lz - v_L0)/v_L0"
+```
+
+atom类型的变量例子如下：
+
+```shell
+variable m          equal   1/${radius} 
+variable Vtest1     atom    2-($m*(sqrt((x-${rad_x})^2+(y-${rad_y})^2))) #变化范围是1~2
+variable Vtest2     equal   ((step-${chiyu})/${SLM1_up})*5               #变化范围是0~5
+variable Tr0        atom    300*(1+v_Vtest1*v_Vtest2)                    #变化范围是6~11
 ```
 
 ## Atomsk
@@ -122,7 +217,7 @@ random 12
 
 首先安装ovito库，在cmd中运行以下命令
 
-```
+```shell
 pip install ovito
 ```
 
@@ -149,6 +244,10 @@ export_file(pipeline, 'out_file.lmp', 'lammps/data', atom_style="atomic")
 要想解决这个问题，只需要在导出data文件时，勾选上忽略原子标号：
 
 ![image-20210101160857293](Every-day-notes.assets/image-20210101160857293.png)
+
+### 根据表达式选择
+
+![image-20210103202010930](Every-day-notes.assets/image-20210103202010930.png)
 
 ## Sublime
 
@@ -357,15 +456,20 @@ Shift+F11 免打扰模式
 
 ### 缩进
 
-缩进可以使用空格和tab，tab具有自动对齐的功能，推荐使用tab键编写in文件。
+缩进可以使用空格和tab，tab具有对齐的功能，推荐使用tab键编写in文件。
 
 ![image-20210103151543301](Every-day-notes.assets/image-20210103151543301.png)
 
 注意，在python中不支持tab键和空格建的混用，所以最好用4个空格代替tab键。
 
+```
+"tab_size": 4,    
+"translate_tabs_to_spaces": true,
+```
+
 ## Python
 
-### 用python脚本实现in文件的循环执行
+### in文件的循环执行
 
 ```python
 #对多个模型进行旋转
@@ -394,6 +498,26 @@ for x in range(1,33):
 初始模型如下：
 
 <img src="Every-day-notes.assets/image-20210101193503363.png" alt="image-20210101193503363" style="zoom:80%;" />
+
+### 生成不同大小的多晶圆柱模型
+
+```python
+import os
+import random
+OutFile = "polycrystal.txt"
+for x in range(0,2):
+    a = random.randint(100, 200)
+    open(OutFile, "w").write(f"box {a} {a} 1\nrandom 12")
+    os.system(f'''atomsk --polycrystal Ni.lmp polycrystal.txt -wrap \
+        -duplicate 1 1 10 -select out cylinder Z 0.5*box 0.5*box {a/4} \
+        -rmatom select {x}.lmp''')
+    os.system(f"del {x}.dat")
+    os.system(f"del {x}_grains-com.xsf")
+    os.system(f"del {x}_nodes.xsf")
+    os.system(f"del {x}_grains-com.lmp")
+    os.system(f"del {x}_nodes.lmp")
+    os.system(f"del {x}_param.txt")
+```
 
 ## Markdown
 
@@ -441,7 +565,7 @@ markdown热搜如下：
 
 实现方式很简单，往注册表里加入几项即可。根据需要将下面的文字复制到文本文件中，格式改为.reg，双击运行。
 
-```
+```shell
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\open with ovito]
@@ -451,17 +575,17 @@ Windows Registry Editor Version 5.00
 @="C:\\Program Files\\OVITO Basic\\ovito.exe %1"
 ```
 
-```
+```shell
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal]
 "Icon"="C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.4.3243.0_x64__8wekyb3d8bbwe\\wt.exe,0"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal\command]
-@="wt.exe"
+@="wt -p "Command Prompt" `; split-pane -p "Windows PowerShell" `; split-pane -H wsl.exe"
 ```
 
-```
+```shell
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\Typora]
@@ -471,6 +595,18 @@ Windows Registry Editor Version 5.00
 @="C:\\Program Files\\Typora\\Typora.exe"
 
 ```
+
+### wsl
+
+https://docs.microsoft.com/en-us/windows/wsl/install-win10
+
+https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
+
+PowerShell中输入wsl即可打开默认的Linux 分发版
+
+改默认的Linux 分发版：`wsl -s Ubuntu-20.04`
+
+可打开 PowerShell 命令行并输入以下命令（仅在 [Windows 内部版本 18362 或更高版本](ms-settings:windowsupdate)中可用），检查分配给每个已安装的 Linux 分发版的 WSL 版本：`wsl -l -v`
 
 ## Ubuntu
 
@@ -489,3 +625,38 @@ hpc@222.199.222.242
 lirui@222.199.222.166
 HuaweiSzp@222.199.222.221
 scp -r lirui@222.199.222.166:/home/lirui/桌面/孙展鹏/test.in .
+
+### 课题组服务器
+
+桌面位置：\home\lirui\桌面
+
+桌面个人文件夹位置：\mnt\data\孙展鹏\1-1-算例
+
+转移数据位置：\media\lirui\lirui-data-old
+
+## Git
+
+### 安装git
+
+https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git
+
+### 初次运行 git 前的配置
+
+```shell
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+```
+
+.gitconfig中的内容
+
+```
+[user]
+	name = Gszp
+	email = 2961428921@qq.com
+[core]
+	editor = vim
+	quotepath = false
+[credential]
+	helper = store
+```
+
