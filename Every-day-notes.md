@@ -275,6 +275,8 @@ Preferences > Key Bindings — User
 { "keys": ["ctrl+shift+end"], "command": "move_to", "args": {"to": "eof", "extend": true} },
 ```
 
+### 加
+
 ### 常用快捷键
 
 Ctrl+Shift+P：打开命令面板 
@@ -518,6 +520,49 @@ for x in range(0,2):
     os.system(f"del {x}_nodes.lmp")
     os.system(f"del {x}_param.txt")
 ```
+
+### 多线程执行atomsk
+
+```python
+import os
+import time
+import subprocess
+
+for x in range(42, 501):
+    p = subprocess.Popen(f'''atomsk --create fcc 3.624 Ni orient [-110] [112] [-1-11] \
+    -duplicate 17 10 14 -select random 20% Ni -substitute Ni Cr \
+    -select random 25% Ni -substitute Ni Fe -select random 33.33% Ni \
+    -substitute Ni Co -select random 50% Ni -substitute Ni Al {x}.lmp''')
+    time.sleep(3)
+    p.kill()
+```
+
+```python
+import os
+import time
+from multiprocessing import Pool
+
+def makeLmp(x):
+    os.system(f'''atomsk --create fcc 3.624 Ni orient [-110] [112] [-1-11] \
+    -duplicate 17 10 14 -select random 20% Ni -substitute Ni Cr \
+    -select random 25% Ni -substitute Ni Fe -select random 33.33% Ni \
+    -substitute Ni Co -select random 50% Ni -substitute Ni Al {x}.lmp''')
+
+def main():
+    LoopList = list(range(1,21))
+    print(LoopList)
+    p = Pool() #p = Pool(processes=4)
+    p.map(makeLmp, LoopList)
+    p.close()
+    p.join()
+
+if __name__ == '__main__':
+    main()
+```
+
+
+
+用os.system会出现atomsk卡住的现象。
 
 ## Markdown
 
