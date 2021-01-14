@@ -5,13 +5,18 @@
 
 - 微软应用商店安装window terminal
 
-- 在`windows功能`中启用虚拟机相关功能
+- 在`windows功能`中启用虚拟机相关功能，重启电脑
 
 - 安装[适用于 x64 计算机的 WSL2 Linux 内核更新包](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
 
 - wsl --set-default-version 2
 
 - 微软应用商店安装ubutu，第一次打开时会自动安装，提示输入用户名和密码（直接关闭即可成为root用户，不建议）
+
+- ```shell
+  #查看分配给ubuntu的wsl版本, *是默认打开的发行版
+  wsl -l -v
+  ```
 
 - Ubuntu换源：https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/ Ubuntu的软件源配置文件是 `/etc/apt/sources.list`
 
@@ -53,7 +58,6 @@
   sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   ```
   
-
 - ```
   #安装插件zsh-syntax-highlighting，可选，依赖oh-my-zsh
   #插件来源：https://github.com/zsh-users
@@ -85,7 +89,7 @@
 弛豫同样能得到体系能量最小稳定的初始构型。
 举个例子：众所周知，Ni的晶格常数为3.5288，那么我们可以在建模时改变晶格常数为1.5288和5.5288。然后在lammps里面弛豫，观察弛豫之后的结果。事实证明，两种情况下，最终都能得到正确的晶格尺寸。然而5.5288得到的结果是有问题的，晶体结构被破坏了。
 
-```
+```shell
 atomsk --create fcc 3.5288 Ni -duplicate 10 10 10 1.lmp
 ```
 
@@ -122,13 +126,12 @@ write_data  chiyu.lmp
 
 ### 温度与动能的转换
 
-在`metal`单位下，动能`E`的单位为`ev` 与`J`的转换关系为：1ev = 1.6021766e-19J，令为n
+在`metal`单位下，动能`E`的单位为`ev` 与`J`的转换关系为：1ev = 1.6021766e-19J，令为n。
 
 K<sub>B</sub>为玻尔兹曼常数，K<sub>B</sub> = 1.3806504e-23
 
 $$
-T = \frac{E \times n}{1.5 \times N \times K_B}
-，E = \frac{1.5 \times N \times K_B \times T}{n} 
+T = \frac{E \times n}{1.5 \times N \times K_B}，E = \frac{1.5 \times N \times K_B \times T}{n}
 $$
 
 ### 使用手册
@@ -703,6 +706,8 @@ markdown热搜如下：
 | :------------: | :----------------: |
 | (7x+5)/(1+y^2) | \frac{7x+5}{1+y^2} |
 
+[隐藏链接用ctrl+k](https://github.com/ohmyzsh/ohmyzsh/wiki)
+
 ## Windows
 
 ### 常用软件加入右键菜单
@@ -851,6 +856,29 @@ PowerShell中输入wsl即可打开默认的Linux 分发版
 
 ## Ubuntu
 
+### 安装
+
+- Ubuntu官网下载ISO镜像文件，或者去国内的镜像网站下载也可以，比如[清华源](https://mirrors.tuna.tsinghua.edu.cn/#)
+- 制作U盘启动盘，软件`Rufus`
+- 正式开始安装，首先将U盘插到电脑上，开机时一直按[F2](对我的笔记本来说)，进入boot启动设置，将你的U盘置顶
+- 可以先不安装，在U盘里尝试Ubuntu系统，有点像一个便携系统
+- 开始安装，可以选择一个硬盘让其清空所有的内容，并自行安装，也可以手动分区
+
+| 挂载点     | 容量 |                           说明                            |
+| :--------- | :--: | :-------------------------------------------------------: |
+| /          | 30G  |                          主分区                           |
+| /boot      |  2G  | 逻辑分区，系统引导，类似于win中磁盘系统预留的100M左右空间 |
+| /home      | 30G  |                  逻辑分区，存放用户文件                   |
+| swap       | 4~6G |            逻辑分区，根据电脑内存大小选择容量             |
+| /tmp       |      |                       系统临时缓存                        |
+| /usr       |      |             系统软件，apt install即在这里安装             |
+| /var       |      |              (variable)：与系统运作过程有关               |
+| /srv       |      |                                                           |
+| /opt       |      |                                                           |
+| /usr/local |      |                                                           |
+
+- 文件格式
+
 ### 常用指令收集
 
 $是普通管理员，#是系统管理员
@@ -875,18 +903,6 @@ ubuntu config --default-user 你的用户名
 桌面个人文件夹位置：\mnt\data\孙展鹏\1-1-算例
 
 转移数据位置：\media\lirui\lirui-data-old
-
-### oh-my-zsh
-
-https://github.com/ohmyzsh/ohmyzsh/wiki
-
-```
-sudo apt install zsh
-chsh -s $(which zsh)
-sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-[123](https://github.com/ohmyzsh/ohmyzsh/wiki)
 
 ## Git
 
@@ -915,4 +931,27 @@ $ git config --global user.email johndoe@example.com
 ```
 
 ## SLM
+
+### 模型
+
+动态group
+
+高熵合金 中熵合金 记忆合金 即有关材料的选择问题
+
+连续扫描试试看，不同的功率下
+
+### 分析
+
+- 发现完整二十面体团簇在冷却速率较低的 Cu50Zr50 非晶粉末中含量较高。
+- 熔池的热影响导致沉积层内类二十面体团簇的含量比熔覆层高，而经过激光熔化和热影响后 Frank-Kasper 多面体团簇的含量均基本不变。同时发现打印样品的极限拉伸强度、硬度和弹性模量与铸态样品测试数值相当。 
+- 探究了工艺参数对激光选区熔化 Cu10Zr90 非晶合金微观结构与晶化行为的影响。发现当激光扫描速率较低时，BCC  晶相大量生成，并伴随少量  HCP
+  和  FCC 晶相出现。提高激光扫描速率能明显降低样品中  BCC 相的含量，产生更多的类二十面体团簇，促进非晶态结构的形成。原因在于高的扫描速率大大降低了原子的弛豫时间，从而抑制了晶相的成核和长大。
+
+### Ovito-Cluster analysis
+
+该方法不行，调节截断距离时，团簇数量有较为明显的变化，但通过图像和`cluster size`可以看出，只是一些单个原子。
+
+### Ovito-CNA
+
+通过删除other原子的方法观察fcc、bcc、hcp原子数量的变化
 
