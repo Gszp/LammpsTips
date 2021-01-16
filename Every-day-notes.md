@@ -63,9 +63,10 @@
   #插件来源：https://github.com/zsh-users
   1.git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
   2.Activate the plugin in ~/.zshrc : plugins=( [plugins...] zsh-syntax-highlighting)
+  #或者：source .zshrc 使配置生效
   3.Start a new terminal session.
-  ```
-
+```
+  
 - ```
   #安装插件zsh-autosuggestions，可选，依赖oh-my-zsh
   1.git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -863,6 +864,7 @@ PowerShell中输入wsl即可打开默认的Linux 分发版
 - 正式开始安装，首先将U盘插到电脑上，开机时一直按[F2](对我的笔记本来说)，进入boot启动设置，将你的U盘置顶
 - 可以先不安装，在U盘里尝试Ubuntu系统，有点像一个便携系统
 - 开始安装，可以选择一个硬盘让其清空所有的内容，并自行安装，也可以手动分区
+- 不选择挂载的目录，会与其根目录位于同一空间。
 
 | 挂载点     | 容量 |                           说明                            |
 | :--------- | :--: | :-------------------------------------------------------: |
@@ -877,7 +879,96 @@ PowerShell中输入wsl即可打开默认的Linux 分发版
 | /opt       |      |                                                           |
 | /usr/local |      |                                                           |
 
-- 文件格式
+- 文件格式Ext4,Ext3,Ext2,btrfs,JFS,XFS,FAT16,FAT32。手动分区时选择最新的Ext4即可。自动分区时可选择最新的ZFS文件格式。
+
+- 安装完成后，即可开始联网使用。
+
+- 更改软件源，在`设置-关于-软件更新`中，我选择的是清华源。
+
+- 换源之后会等待一会儿。
+
+- ```
+  #默认的火狐浏览器无法播放视频，因此我们先安装chrome
+  #下载好.deb安装包后，进入该文件夹，执行以下命令
+  sudo apt install gdebi
+  sudo gdebi google-chrome-stable_current_amd64.deb
+  ```
+
+- ```
+  #安装git
+  #打开文件夹时勾选显示隐藏文件即可看到.git文件夹
+  sudo apt install git
+  git clone https://github.com/Gszp/LammpsTips.git
+  ```
+
+- ```
+  #安装typora
+  # or run:
+  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
+  wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+  # add Typora's repository
+  sudo add-apt-repository 'deb https://typora.io/linux ./'
+  sudo apt-get update
+  # install typora
+  sudo apt-get install typora
+  #下载主题，并解压
+  tar -zvxf typora-purple-theme-1.4.2.tar.gz
+  ```
+
+- .deb文件用`软件安装管理器`安装也是一样的，比如`teamview`的安装
+
+- ```
+  #ifconfig 可以很方便地查看网络信息，但在 Ubuntu 20.04 中，是没有安装 ifconfig 工具的：
+  #安装下面的软件包即可同时安装 ifconfig：
+  sudo apt install net-tools
+  ```
+
+- 
+
+### advanced packing tool
+
+> Debian 作为 Ubuntu、Linux Mint 和 elementary OS 等 Linux 操作系统的母板，其具有强健的「包管理」系统，它的每个组件和应用程序都内置在系统中安装的软件包中。Debian 使用一套名为 Advanced Packaging Tool（APT）的工具来管理这种包系统，不过请不要把它与 apt 命令混淆，它们之间是其实不是同一个东西。
+>
+> 在基于 Debian 的 Linux 发行版中，有各种工具可以与 APT 进行交互，以方便用户安装、删除和管理的软件包。apt-get 便是其中一款广受欢迎的命令行工具，另外一款较为流行的是 Aptitude 这一命令行与 GUI 兼顾的小工具。
+
+| apt 命令         |      取代的命令      |           命令的功能           |
+| :--------------- | :------------------: | :----------------------------: |
+| apt install      |   apt-get install    |           安装软件包           |
+| apt remove       |    apt-get remove    |           移除软件包           |
+| apt purge        |    apt-get purge     |      移除软件包及配置文件      |
+| apt update       |    apt-get update    |         刷新存储库索引         |
+| apt upgrade      |   apt-get upgrade    |     升级所有可升级的软件包     |
+| apt autoremove   |  apt-get autoremove  |       自动删除不需要的包       |
+| apt full-upgrade | apt-get dist-upgrade | 在升级软件包时自动处理依赖关系 |
+| apt search       |   apt-cache search   |          搜索应用程序          |
+| apt show         |    apt-cache show    |          显示安装细节          |
+
+引用：[Ubuntu中apt与apt-get命令的区别](https://blog.csdn.net/taotongning/article/details/82320472)
+
+### shell命令
+
+- ls ：显示文件信息，ls -a , ls -al : 显示隐藏文件
+- cd / ：进入根目录
+- pwd ：显示当前路径
+- uname ：显示计算机信息
+- clear ：清屏
+- cat ：查看文件内容
+- sudo su ：切换到root用户
+- rm /* : 删除根目录下的所有文件，rm /* -rf : 强制递归删除，r指目录
+- touch a.c : 创建文件a.c
+- cp a.c b.c : 复制文件
+- mkdir : 创建目录
+- mv ：移动，重命名
+- 命令 --help ：查看帮助信息
+
+### 网卡
+
+```
+sudo apt install net-tools
+ifconfig : 查看网卡信息,-a查看所有的网卡
+sudo ifconfig wlp2s0 down ：关闭某个网卡, up打开
+sudo ifconfig wlp2s0 172.20.10.2 :更改网卡ip地址，可能导致无法上网
+```
 
 ### 常用指令收集
 
