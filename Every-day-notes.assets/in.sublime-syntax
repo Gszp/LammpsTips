@@ -3,7 +3,7 @@
 # See http://www.sublimetext.com/docs/3/syntax.html
 file_extensions:
   - in
-scope: source.in
+scope: source.in,in.source
 
 contexts:
   # The prototype context is prepended to all contexts but those setting
@@ -28,7 +28,7 @@ contexts:
     # strings in YAML. When using single quoted strings, only single quotes
     # need to be escaped: this is done by using two single quotes next to each
     # other.
-    - match: '\b(restart|reset_timestep|read_restart|neighbor|thermo_style|clear|echo|if|include|jump|label|log|units|dimension|run|atom_style|bond_style|angle_style|boundary|pair_style|timestep|thermo|group|dump|lattice|mass|minimize|read_data)\b'
+    - match: '\b(write_data|restart|reset_timestep|read_restart|neighbor|thermo_style|clear|echo|if|include|jump|label|log|units|dimension|run|atom_style|bond_style|angle_style|boundary|pair_style|timestep|thermo|group|dump|lattice|mass|minimize|read_data)\b'
       scope: keyword.control.in
 
   functions:
@@ -66,11 +66,11 @@ contexts:
 
 
   opertions:
-    - match: '\b(|equal|all|sum|reduce|=|max|yes|no|true|false|delete|lower|reduced|subtract)\b'
+    - match: '\b(|equal|all|sum|count|reduce|=|max|yes|no|true|false|delete|lower|reduced|subtract)\b'
       scope: keyword.operator.in
 
   parameter:
-    - match: '\b(step|ave/correlate|create|dist|ave/chunk|file|ehex|check|data.lmp|linear|chunk|couple|block|box|delay|eam/alloy|lammpstrj|metal|type|multi|nsq|bin|hybrid/overlay|hybrid|lj/cut|atom)\b'
+    - match: '\b(step|ave/correlate|create|dist|ave/chunk|file|ehex|check|data.lmp|linear|chunk|couple|block|box|delay|meam/c|eam/alloy|lammpstrj|metal|p|s|f|type|multi|nsq|bin|hybrid/overlay|hybrid|lj/cut|atom|atomic|full|cylinder|dynamic|every|x|y|z)\b'
       scope: punctuation.definition.string.in
 
 #|x|y|z|vg[0-9.]+[x,y,z]|fg[0-9.]+[x,y,z]|pg[0-9.]+[x,y,z]|g[0-9.]+

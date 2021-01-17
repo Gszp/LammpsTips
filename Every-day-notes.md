@@ -30,15 +30,15 @@
 
 - lammps安装路径：\\wsl$\Ubuntu\usr\share\doc\lammps-stable-doc\examples
 
-- `````
+- ```
   #打开terminal的设置文件，找到defaults添加一行命令，如下所示：
   "defaults":
   {
   	"startingDirectory" : ".", //使用注册表在当前文件夹打开
   	// Put settings here that you want to apply to all profiles.
   },
-  `````
-
+  ```
+- <img src="Every-day-notes.assets/image-20210117155134337.png" alt="image-20210117155134337" style="zoom:50%;" />
 - ```
   #将termianal加入右键菜单
   #以下内容复制到文本文件中，改为.reg文件，双击运行
@@ -48,10 +48,12 @@
   "Icon"="C:\\Program Files\\WindowsApps\\Microsoft.WindowsTerminal_1.4.3243.0_x64__8wekyb3d8bbwe\\wt.exe,0"
   
   [HKEY_CLASSES_ROOT\Directory\Background\shell\Terminal\command]
-  @="wt %1"
+  @=wt
   ```
-
-- ```
+- ![image-20210117160055042](Every-day-notes.assets/image-20210117160055042.png)
+- sublime `CTRL+Shift+P` 搜索：package control 打开User文件加添加 [in.sublime-syntax](Every-day-notes.assets\in.sublime-syntax)  即可in文件高亮
+  
+  ```
   #安装oh-my-zsh,可选
   sudo apt install zsh
   chsh -s $(which zsh)
@@ -65,14 +67,15 @@
   2.Activate the plugin in ~/.zshrc : plugins=( [plugins...] zsh-syntax-highlighting)
   #或者：source .zshrc 使配置生效
   3.Start a new terminal session.
-```
-  
+  ```
 - ```
   #安装插件zsh-autosuggestions，可选，依赖oh-my-zsh
   1.git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   2.Activate the plugin in ~/.zshrc : plugins=([plugins...] zsh-autosuggestions)
   3.Start a new terminal session.
   ```
+
+- 
 
 ### 能量最小化
 
