@@ -950,6 +950,8 @@ PowerShell中输入wsl即可打开默认的Linux 分发版
 
 ### shell命令
 
+- 退出命令用 `Esc` 或`Ctrl+C` 或`q`
+
 - ls ：显示文件信息，ls -a , ls -al : 显示隐藏文件
 - cd / ：进入根目录
 - pwd ：显示当前路径
@@ -963,6 +965,14 @@ PowerShell中输入wsl即可打开默认的Linux 分发版
 - mkdir : 创建目录
 - mv ：移动，重命名
 - 命令 --help ：查看帮助信息
+- sync : 数据同步写入磁盘
+- find ：查找文件
+- grep ：`查找内容` grep -nr "Ubuntu" /
+- du : 查看文件大小 du /lib -sh
+- df ：磁盘空间检查命令，可以查看挂载点
+- gedit ：ubuntu中的notepad.exe
+- ps -aux : 查看进程，top也可
+- file 记事本 ：查看文件类型，例如：记事本: UTF-8 Unicode text
 
 ### 网卡
 
@@ -997,6 +1007,48 @@ ubuntu config --default-user 你的用户名
 桌面个人文件夹位置：\mnt\data\孙展鹏\1-1-算例
 
 转移数据位置：\media\lirui\lirui-data-old
+
+### 软件安装
+
+- APP Store
+
+- 使用APT工具安装，需要root
+
+  sudo apt-get install git , 遇到无法获得锁的情况就重启，可能是因为有没结束的进程
+
+  sudo apt-get install mplayer
+
+  终端输入mplayer查看用法
+
+- deb软件包安装
+
+  sudo dpkg -i xxx
+
+  软件图标位置/usr/share/applications，可复制到桌面
+
+- 下载源码编译安装
+
+  tree的安装
+
+  make
+
+  make install
+
+- 其他
+
+### 文件系统
+
+一，根目录，所有其他的目录由其衍生
+
+二，/proc 存放系统运行信息
+
+/usr 很大，与系统用户有关的文件
+
+三，绝对路径与相对路径
+
+/home/uszp
+
+../..
 
 ## Git
 
