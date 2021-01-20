@@ -1,0 +1,15 @@
+units metal
+boundary p s p  
+atom_style atomic
+read_data Ni.lmp
+#lattice fcc 3.5288
+
+region  Rboundary       block INF INF   INF 5.5      INF INF
+region  Rthermo         block INF INF   7   12.5      INF INF
+region  Rnewton         block INF INF   14   20     INF INF
+
+set region Rboundary type 2 
+set region Rthermo type 3 
+set region Rnewton type 4
+
+write_data FL.lmp 

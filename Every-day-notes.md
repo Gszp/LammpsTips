@@ -148,11 +148,30 @@ $$
 
 值得注意的是，我们经常查阅的命令语法部分放在了程序员指南中的Commands中，遇到不会的命令，直接搜索阅读就可以了。
 
-### commands
+### set type
 
 ```
 set		group lower type 2
 set		group upper type 3
+#用该命令时记得在data文件中先定义好原子类型及质量，否则会报错，比如下面这样
+```
+
+```
+# Fcc Ni oriented X=[100] Y=[010] Z=[001].
+ 
+       21600  atoms
+           4  atom types
+ 
+      0.00000000     211.72800000  xlo xhi
+      0.00000000     105.86400000  ylo yhi
+      0.00000000      10.58640000  zlo zhi
+ 
+Masses
+ 
+           1   58.69340000    # Ni
+           2   58.69340000    # Ni
+           3   58.69340000    # Ni
+           4   58.69340000    # Ni
 ```
 
 ### group函数与输出
@@ -267,6 +286,50 @@ label xyz
 if "$a > 16" then "print $a" else "print a小于等于16"
 next a
 jump 1.in xyz
+```
+
+### dump
+
+dump文件中的内容如下所示
+
+dump myDump all atom 10 $a.lammpstrj
+
+```
+ITEM: TIMESTEP
+0
+ITEM: NUMBER OF ATOMS
+16050
+ITEM: BOX BOUNDS pp pp pp
+0.0000000000000000e+00 5.0000000000000000e+02
+0.0000000000000000e+00 1.7644000000000000e+02
+-7.0575999999999999e+00 1.0586399999999999e+01
+ITEM: ATOMS id type xs ys zs
+1607 1 0.40821 0.29 0.1
+1606 1 0.411738 0.29 0
+1609 1 0.415267 0.29 0.1
+4816 1 0.411738 0.29 0.2
+1608 1 0.418796 0.29 0
+1610 1 0.418796 0.28 0.1
+```
+
+值得注意的是，如果用了reset_timestep 0命令，那么你的dump命令应该放在该行的后面，否则你会发现dump文件中有两个 0 TIMESTEP
+
+因此，如果你需要看能量最小化的过程就不要重设时间步
+
+### units lattice
+
+不建议使用该命令。很多时候。在定义region或者其他要用到距离的地方，默认都是lattice单位，但前提是你有lattice这一行，比如`lattice fcc 3.5288`
+
+如果你没写这一行，那默认的单位就是box，不用再加上`units box`
+
+lammps中使用该命令的方式也比较简单粗暴，就是用你写的`数字 X lattice`来求出距离。
+
+比如：
+
+```
+lattice fcc 3.5288
+region  Rboundary       block INF INF   INF 5.5      INF INF
+#而且由于原子的坐标一般从0开始，比如0 1.7644 3.5288 所以用lattice单位也并不直观。
 ```
 
 ## Atomsk
